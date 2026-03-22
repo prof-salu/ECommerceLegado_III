@@ -1,20 +1,17 @@
 public class CarrinhoDeCompras {
     private double valorTotal;
-    private String tipoDesconto; // "VIP", "BLACKFRIDAY", "NENHUM"
+    private EstrategiaDesconto estrategia; // Opcional, injetado
 
-    public CarrinhoDeCompras(double valorTotal, String tipoDesconto) {
+    public CarrinhoDeCompras(double valorTotal) {
         this.valorTotal = valorTotal;
-        this.tipoDesconto = tipoDesconto;
     }
 
-    // ERRO: A matemática da regra de negócio está chumbada no carrinho com condicionais.
+    public void setEstrategia(EstrategiaDesconto estrategia) {
+        this.estrategia = estrategia;
+    }
+
     public double calcularTotal() {
-        if (tipoDesconto.equals("VIP")) {
-            return valorTotal * 0.90; // 10% de desconto
-        } else if (tipoDesconto.equals("BLACKFRIDAY")) {
-            return valorTotal * 0.50; // 50% de desconto
-        } else {
-            return valorTotal;
-        }
+        if (estrategia == null) return valorTotal;
+        return estrategia.calcularDesconto(valorTotal); // Delega para a estratégia
     }
 }

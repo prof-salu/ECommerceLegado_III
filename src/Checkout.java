@@ -1,14 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Checkout {
-    // ERRO: Alto acoplamento. Se a equipe de marketing quiser mandar um SMS, teremos que modificar esta classe.
+    // Lista dinâmica de assinantes (Baixíssimo acoplamento)
+    private List<AcaoAposPagamento> acoes = new ArrayList<>();
+
+    public void adicionarAcao(AcaoAposPagamento acao) {
+        this.acoes.add(acao);
+    }
+
     public void finalizarCompra(Pedido pedido) {
-        System.out.println("Pagamento aprovado!");
-
-        NotaFiscal nf = new NotaFiscal();
-        Email email = new Email();
-        Transportadora transportadora = new Transportadora();
-
-        nf.gerar(pedido);
-        email.enviar(pedido);
-        transportadora.agendar(pedido);
+        System.out.println("Pagamento aprovado! Notificando assinantes...");
+        for (AcaoAposPagamento acao : acoes) {
+            acao.executar(pedido); // Polimorfismo puro!
+        }
     }
 }
